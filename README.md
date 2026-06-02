@@ -2,7 +2,7 @@
 
 This project analyzes vendor performance using purchase, sales, freight, and inventory data stored in SQLite.
 
-## Simple explanation
+## Project Summary
 
 I loaded six CSV files into SQLite, cleaned them with SQL, built fact and dimension tables, created a final vendor performance table, checked the totals against the source data, and used that table for queries and reporting.
 
@@ -160,8 +160,3 @@ Run one query:
 python .\src\query_mart.py --query top_vendor_sales --limit 10
 ```
 
-## Notes
-
-- The main workflow is in `src/` and `sql/`.
-- This project fits data analytics / BI better than machine learning.
-- The HTML report is useful for presentation, but the core project is the SQL and Python pipeline.
