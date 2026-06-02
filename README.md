@@ -108,6 +108,8 @@ From the rebuilt `mart_vendor_performance` table:
 - [src/query_mart.py](./src/query_mart.py)
 - [src/build_dashboard_html.py](./src/build_dashboard_html.py)
 
+Older notebook files from the earlier workflow are kept in [archive](./archive).
+
 ## How to run
 
 ### 1. Install dependencies
