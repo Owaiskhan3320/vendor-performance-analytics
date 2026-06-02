@@ -1,0 +1,14 @@
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+logs/
+data.zip
+*.pbix
+*.log
+inventory.db
+data/

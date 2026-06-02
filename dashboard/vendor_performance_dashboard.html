@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vendor Performance Report</title>
+  <style>
+    :root {
+      --ink: #1b2430;
+      --muted: #5d6a79;
+      --line: #dde3ea;
+      --panel: #ffffff;
+      --bg: #f5f7f8;
+      --teal: #0f766e;
+      --amber: #d97706;
+      --shadow: 0 10px 28px rgba(27, 36, 48, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: linear-gradient(180deg, #f8fafb 0%, var(--bg) 100%);
+    }
+    .wrap {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 28px 22px 52px;
+    }
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      box-shadow: var(--shadow);
+      padding: 28px;
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      color: var(--teal);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 38px;
+      line-height: 1.1;
+    }
+    .hero p {
+      margin: 0;
+      max-width: 900px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+    .meta {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 18px;
+    }
+    .nav a {
+      text-decoration: none;
+      color: var(--ink);
+      background: #eef4f5;
+      border: 1px solid var(--line);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .kpi {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .kpi-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 700;
+    }
+    .kpi-value {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .kpi-note {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .insight-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .insight {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .insight h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .insight p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 18px;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+    }
+    .span-12 { grid-column: span 12; }
+    .span-6 { grid-column: span 6; }
+    h2 {
+      margin: 0 0 10px;
+      font-size: 25px;
+    }
+    .section-copy {
+      color: var(--muted);
+      margin: 0 0 16px;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    .legend {
+      display: flex;
+      gap: 18px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      display: inline-block;
+    }
+    .trend-svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #fbfcfd;
+      border-radius: 14px;
+      border: 1px solid #edf1f4;
+    }
+    .axis-label {
+      fill: #71808e;
+      font-size: 11px;
+    }
+    .grid-line {
+      stroke: #e7edf2;
+      stroke-width: 1;
+    }
+    .bar-row {
+      display: grid;
+      grid-template-columns: 220px 1fr 110px;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .bar-label {
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .bar-track {
+      height: 14px;
+      background: #eef2f5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #0f766e 0%, #16928a 100%);
+    }
+    .bar-value {
+      text-align: right;
+      font-weight: 700;
+      font-size: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid #edf1f4;
+      vertical-align: top;
+    }
+    th {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 11px;
+    }
+    .note-box {
+      background: #f1f7f8;
+      border: 1px solid #d8e7ea;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    .bullets {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    @media (max-width: 1080px) {
+      .kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .insight-grid { grid-template-columns: 1fr; }
+      .span-6 { grid-column: span 12; }
+      .bar-row { grid-template-columns: 1fr; }
+      .bar-value { text-align: left; }
+    }
+    @media (max-width: 680px) {
+      .wrap { padding: 16px 12px 32px; }
+      .hero { padding: 20px; }
+      h1 { font-size: 29px; }
+      .kpi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero" id="overview">
+      <div class="eyebrow">Vendor Performance Report</div>
+      <h1>Sales, Spend, Freight, and Inventory View</h1>
+      <p>
+        This report is built from the SQLite tables in this project. It brings sales, purchases, freight, inventory cost, and vendor concentration into one view.
+      </p>
+      <div class="meta">Generated on 2026-06-02 09:08 UTC</div>
+    </section>
+
+    <nav class="nav">
+      <a href="#overview">Overview</a>
+      <a href="#trend">Trend</a>
+      <a href="#vendors">Vendors</a>
+      <a href="#risk">Risk</a>
+      <a href="#notes">Notes</a>
+    </nav>
+
+    <section class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-label">Purchase Dollars</div>
+        <div class="kpi-value">$321.90M</div>
+        <div class="kpi-note">Total purchase dollars in the final table.</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Sales Dollars</div>
+        <div class="kpi-value">$452.06M</div>
+        <div class="kpi-note">Total sales dollars in the final table.</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Gross Profit After Freight</div>
+        <div class="kpi-value">$128.52M</div>
+        <div class="kpi-note">Sales minus purchase cost and allocated freight.</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Weighted Margin</div>
+        <div class="kpi-value">28.43%</div>
+        <div class="kpi-note">Gross profit after freight divided by sales dollars.</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Allocated Freight</div>
+        <div class="kpi-value">$1.64M</div>
+        <div class="kpi-note">Allocated from vendor totals into the final mart.</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Unsold Inventory Cost</div>
+        <div class="kpi-value">$55.43M</div>
+        <div class="kpi-note">Estimated using end inventory units and average purchase cost.</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Vendor Coverage</div>
+        <div class="kpi-value">129</div>
+        <div class="kpi-note">Distinct vendors in the final mart.</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Top 10 Vendor Share</div>
+        <div class="kpi-value">65.34%</div>
+        <div class="kpi-note">Share of purchase dollars held by the top 10 vendors.</div>
+      </div>
+    </section>
+
+    <section class="insight-grid">
+      <div class="insight">
+        <h3>Top sales vendor</h3>
+        <p><strong>DIAGEO NORTH AMERICA INC</strong> is the largest vendor by sales at <strong>$68.74M</strong>.</p>
+      </div>
+      <div class="insight">
+        <h3>Top profit vendor</h3>
+        <p><strong>DIAGEO NORTH AMERICA INC</strong> has the highest gross profit after freight at <strong>$17.53M</strong>.</p>
+      </div>
+      <div class="insight">
+        <h3>Peak sales month</h3>
+        <p>The highest monthly sales happened in <strong>2024-12</strong> with <strong>$52.31M</strong> in sales.</p>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card span-12" id="trend">
+        <h2>Monthly Sales and Purchase Trend</h2>
+        <p class="section-copy">This trend compares monthly purchase dollars and sales dollars.</p>
+        <div class="legend">
+          <span><i class="dot" style="background:#0f766e"></i>Sales</span>
+          <span><i class="dot" style="background:#d97706"></i>Purchases</span>
+        </div>
+        <svg viewBox='0 0 940 280' class='trend-svg' role='img' aria-label='Monthly sales and purchase trend'><line x1='50' y1='20.00' x2='920' y2='20.00' class='grid-line' /><line x1='50' y1='73.75' x2='920' y2='73.75' class='grid-line' /><line x1='50' y1='127.50' x2='920' y2='127.50' class='grid-line' /><line x1='50' y1='181.25' x2='920' y2='181.25' class='grid-line' /><line x1='50' y1='235.00' x2='920' y2='235.00' class='grid-line' /><polyline fill='none' stroke='#0f766e' stroke-width='4' points='50.00,235.00 122.50,112.30 195.00,116.32 267.50,115.86 340.00,108.73 412.50,86.87 485.00,73.52 557.50,30.75 630.00,74.48 702.50,76.86 775.00,85.26 847.50,61.10 920.00,20.00' /><polyline fill='none' stroke='#d97706' stroke-width='4' points='50.00,206.44 122.50,156.34 195.00,152.20 267.50,151.76 340.00,145.41 412.50,117.07 485.00,112.94 557.50,102.69 630.00,108.63 702.50,124.69 775.00,104.15 847.50,122.99 920.00,126.71' /><text x='50.00' y='268' text-anchor='middle' class='axis-label'>2023-12</text><text x='122.50' y='268' text-anchor='middle' class='axis-label'>2024-01</text><text x='195.00' y='268' text-anchor='middle' class='axis-label'>2024-02</text><text x='267.50' y='268' text-anchor='middle' class='axis-label'>2024-03</text><text x='340.00' y='268' text-anchor='middle' class='axis-label'>2024-04</text><text x='412.50' y='268' text-anchor='middle' class='axis-label'>2024-05</text><text x='485.00' y='268' text-anchor='middle' class='axis-label'>2024-06</text><text x='557.50' y='268' text-anchor='middle' class='axis-label'>2024-07</text><text x='630.00' y='268' text-anchor='middle' class='axis-label'>2024-08</text><text x='702.50' y='268' text-anchor='middle' class='axis-label'>2024-09</text><text x='775.00' y='268' text-anchor='middle' class='axis-label'>2024-10</text><text x='847.50' y='268' text-anchor='middle' class='axis-label'>2024-11</text><text x='920.00' y='268' text-anchor='middle' class='axis-label'>2024-12</text></svg>
+      </div>
+
+      <div class="card span-6" id="vendors">
+        <h2>Top Vendors By Sales</h2>
+        <p class="section-copy">Vendors ranked by sales dollars.</p>
+        <div class='bar-row'><div class='bar-label'>DIAGEO NORTH AMERICA INC</div><div class='bar-track'><div class='bar-fill' style='width:100.00%'></div></div><div class='bar-value'>$68.74M</div></div><div class='bar-row'><div class='bar-label'>MARTIGNETTI COMPANIES</div><div class='bar-track'><div class='bar-fill' style='width:59.71%'></div></div><div class='bar-value'>$41.05M</div></div><div class='bar-row'><div class='bar-label'>PERNOD RICARD USA</div><div class='bar-track'><div class='bar-fill' style='width:46.96%'></div></div><div class='bar-value'>$32.28M</div></div><div class='bar-row'><div class='bar-label'>JIM BEAM BRANDS COMPANY</div><div class='bar-track'><div class='bar-fill' style='width:46.41%'></div></div><div class='bar-value'>$31.91M</div></div><div class='bar-row'><div class='bar-label'>BACARDI USA INC</div><div class='bar-track'><div class='bar-fill' style='width:36.39%'></div></div><div class='bar-value'>$25.01M</div></div><div class='bar-row'><div class='bar-label'>CONSTELLATION BRANDS INC</div><div class='bar-track'><div class='bar-fill' style='width:35.60%'></div></div><div class='bar-value'>$24.47M</div></div><div class='bar-row'><div class='bar-label'>E &amp; J GALLO WINERY</div><div class='bar-track'><div class='bar-fill' style='width:26.99%'></div></div><div class='bar-value'>$18.56M</div></div><div class='bar-row'><div class='bar-label'>BROWN-FORMAN CORP</div><div class='bar-track'><div class='bar-fill' style='width:26.88%'></div></div><div class='bar-value'>$18.48M</div></div><div class='bar-row'><div class='bar-label'>ULTRA BEVERAGE COMPANY LLP</div><div class='bar-track'><div class='bar-fill' style='width:25.93%'></div></div><div class='bar-value'>$17.82M</div></div><div class='bar-row'><div class='bar-label'>M S WALKER INC</div><div class='bar-track'><div class='bar-fill' style='width:22.50%'></div></div><div class='bar-value'>$15.47M</div></div>
+      </div>
+
+      <div class="card span-6">
+        <h2>Top Vendors By Gross Profit</h2>
+        <p class="section-copy">Vendors ranked by gross profit after freight.</p>
+        <div class='bar-row'><div class='bar-label'>DIAGEO NORTH AMERICA INC</div><div class='bar-track'><div class='bar-fill' style='width:100.00%'></div></div><div class='bar-value'>$17.53M</div></div><div class='bar-row'><div class='bar-label'>MARTIGNETTI COMPANIES</div><div class='bar-track'><div class='bar-fill' style='width:74.41%'></div></div><div class='bar-value'>$13.04M</div></div><div class='bar-row'><div class='bar-label'>CONSTELLATION BRANDS INC</div><div class='bar-track'><div class='bar-fill' style='width:50.30%'></div></div><div class='bar-value'>$8.82M</div></div><div class='bar-row'><div class='bar-label'>PERNOD RICARD USA</div><div class='bar-track'><div class='bar-fill' style='width:45.84%'></div></div><div class='bar-value'>$8.03M</div></div><div class='bar-row'><div class='bar-label'>JIM BEAM BRANDS COMPANY</div><div class='bar-track'><div class='bar-fill' style='width:43.25%'></div></div><div class='bar-value'>$7.58M</div></div><div class='bar-row'><div class='bar-label'>BACARDI USA INC</div><div class='bar-track'><div class='bar-fill' style='width:41.66%'></div></div><div class='bar-value'>$7.30M</div></div><div class='bar-row'><div class='bar-label'>E &amp; J GALLO WINERY</div><div class='bar-track'><div class='bar-fill' style='width:35.40%'></div></div><div class='bar-value'>$6.20M</div></div><div class='bar-row'><div class='bar-label'>BROWN-FORMAN CORP</div><div class='bar-track'><div class='bar-fill' style='width:27.85%'></div></div><div class='bar-value'>$4.88M</div></div><div class='bar-row'><div class='bar-label'>ULTRA BEVERAGE COMPANY LLP</div><div class='bar-track'><div class='bar-fill' style='width:25.93%'></div></div><div class='bar-value'>$4.54M</div></div><div class='bar-row'><div class='bar-label'>M S WALKER INC</div><div class='bar-track'><div class='bar-fill' style='width:25.53%'></div></div><div class='bar-value'>$4.47M</div></div>
+      </div>
+
+      <div class="card span-6">
+        <h2>Procurement Concentration</h2>
+        <p class="section-copy">This table shows how purchase spend is distributed across the largest vendors.</p>
+        <table><thead><tr><th>Vendor Name</th><th>Purchase Dollars</th><th>Contribution Pct</th></tr></thead><tbody><tr><td>DIAGEO NORTH AMERICA INC</td><td>$50.96M</td><td>15.83%</td></tr><tr><td>MARTIGNETTI COMPANIES</td><td>$27.86M</td><td>8.66%</td></tr><tr><td>JIM BEAM BRANDS COMPANY</td><td>$24.20M</td><td>7.52%</td></tr><tr><td>PERNOD RICARD USA</td><td>$24.12M</td><td>7.49%</td></tr><tr><td>BACARDI USA INC</td><td>$17.62M</td><td>5.48%</td></tr><tr><td>CONSTELLATION BRANDS INC</td><td>$15.57M</td><td>4.84%</td></tr><tr><td>BROWN-FORMAN CORP</td><td>$13.53M</td><td>4.20%</td></tr><tr><td>ULTRA BEVERAGE COMPANY LLP</td><td>$13.21M</td><td>4.10%</td></tr><tr><td>E &amp; J GALLO WINERY</td><td>$12.29M</td><td>3.82%</td></tr><tr><td>M S WALKER INC</td><td>$10.94M</td><td>3.40%</td></tr></tbody></table>
+      </div>
+
+      <div class="card span-6" id="risk">
+        <h2>Inventory Risk By Vendor</h2>
+        <p class="section-copy">These vendors have the largest estimated unsold inventory cost.</p>
+        <table><thead><tr><th>Vendor Name</th><th>Unsold Cost</th><th>Avg Inventory Turnover</th><th>Sales Dollars</th></tr></thead><tbody><tr><td>DIAGEO NORTH AMERICA INC</td><td>$7.21M</td><td>95.8072</td><td>$68.74M</td></tr><tr><td>MARTIGNETTI COMPANIES</td><td>$5.80M</td><td>9.4433</td><td>$41.05M</td></tr><tr><td>JIM BEAM BRANDS COMPANY</td><td>$3.80M</td><td>12.0659</td><td>$31.91M</td></tr><tr><td>PERNOD RICARD USA</td><td>$3.61M</td><td>6.1000</td><td>$32.28M</td></tr><tr><td>ULTRA BEVERAGE COMPANY LLP</td><td>$3.52M</td><td>10.1080</td><td>$17.82M</td></tr><tr><td>CONSTELLATION BRANDS INC</td><td>$2.29M</td><td>17.7884</td><td>$24.47M</td></tr><tr><td>M S WALKER INC</td><td>$2.22M</td><td>16.9174</td><td>$15.47M</td></tr><tr><td>PERFECTA WINES</td><td>$2.20M</td><td>8.1609</td><td>$7.83M</td></tr><tr><td>BACARDI USA INC</td><td>$2.04M</td><td>6.6046</td><td>$25.01M</td></tr><tr><td>E &amp; J GALLO WINERY</td><td>$1.79M</td><td>31.5954</td><td>$18.56M</td></tr></tbody></table>
+      </div>
+
+      <div class="card span-6">
+        <h2>Store Dependency Signals</h2>
+        <p class="section-copy">For each store, this shows the largest vendor by purchase dollars. In this top 10 list, <strong>5</strong> stores are at or above 20% dependency.</p>
+        <table><thead><tr><th>Store Id</th><th>Vendor Name</th><th>Purchase Dollars</th><th>Dependency Pct</th></tr></thead><tbody><tr><td>61</td><td>DIAGEO NORTH AMERICA INC</td><td>$926.23K</td><td>23.12%</td></tr><tr><td>48</td><td>DIAGEO NORTH AMERICA INC</td><td>$773.59K</td><td>22.64%</td></tr><tr><td>27</td><td>DIAGEO NORTH AMERICA INC</td><td>$674.27K</td><td>22.18%</td></tr><tr><td>53</td><td>DIAGEO NORTH AMERICA INC</td><td>$646.53K</td><td>22.08%</td></tr><tr><td>58</td><td>DIAGEO NORTH AMERICA INC</td><td>$525.24K</td><td>21.39%</td></tr><tr><td>13</td><td>DIAGEO NORTH AMERICA INC</td><td>$358.56K</td><td>19.96%</td></tr><tr><td>10</td><td>DIAGEO NORTH AMERICA INC</td><td>$1.15M</td><td>19.86%</td></tr><tr><td>31</td><td>DIAGEO NORTH AMERICA INC</td><td>$468.25K</td><td>19.71%</td></tr><tr><td>51</td><td>DIAGEO NORTH AMERICA INC</td><td>$539.29K</td><td>19.55%</td></tr><tr><td>43</td><td>DIAGEO NORTH AMERICA INC</td><td>$308.46K</td><td>19.21%</td></tr></tbody></table>
+      </div>
+
+      <div class="card span-6">
+        <h2>Slow-Turnover Products</h2>
+        <p class="section-copy">These products have low turnover and still hold inventory cost.</p>
+        <table><thead><tr><th>Vendor Name</th><th>Product Description</th><th>Purchase Dollars</th><th>Sales Dollars</th><th>Inventory Turnover Ratio</th><th>Estimated Unsold Inventory Cost</th></tr></thead><tbody><tr><td>ULTRA BEVERAGE COMPANY LLP</td><td>Patron Reposado Tequila</td><td>$114.39K</td><td>$148.00K</td><td>0.9372</td><td>$118.68K</td></tr><tr><td>MARTIGNETTI COMPANIES</td><td>Piper Heidsieck Brut</td><td>$15.12K</td><td>$48.42K</td><td>0.5033</td><td>$48.25K</td></tr><tr><td>MOET HENNESSY USA INC</td><td>Grand Marnier Cuvee 1880</td><td>$24.53K</td><td>$18.20K</td><td>0.3478</td><td>$46.30K</td></tr><tr><td>REMY COINTREAU USA INC</td><td>Remy Martin XO Excellence</td><td>$59.40K</td><td>$21.24K</td><td>0.6626</td><td>$44.62K</td></tr><tr><td>PERFECTA WINES</td><td>Ch La Mission Haut-Brion 10</td><td>$21.85K</td><td>$33.00K</td><td>0.5128</td><td>$43.70K</td></tr><tr><td>BACARDI USA INC</td><td>Aberfeldy Single Cask</td><td>$8.40K</td><td>$9.46K</td><td>0.1462</td><td>$41.69K</td></tr><tr><td>Russian Standard Vodka</td><td>Russian Standard Vodka</td><td>$41.85K</td><td>$12.57K</td><td>0.4211</td><td>$38.51K</td></tr><tr><td>PERFECTA WINES</td><td>Whistle Pig Boss Hog Rye</td><td>$44.49K</td><td>$11.06K</td><td>0.4966</td><td>$35.64K</td></tr><tr><td>SOUTHERN WINE &amp; SPIRITS NE</td><td>Ch Cos d&#x27;Estournel 10</td><td>$1.54K</td><td>$2.70K</td><td>0.0569</td><td>$32.36K</td></tr><tr><td>M S WALKER INC</td><td>Integre Vodka</td><td>$33.56K</td><td>$2.58K</td><td>0.1276</td><td>$31.55K</td></tr></tbody></table>
+      </div>
+
+      <div class="card span-12" id="notes">
+        <h2>Checks and Notes</h2>
+        <div class="note-box">
+          The report is built from SQL tables that were checked against the source data. Purchase totals, sales totals, freight totals, table relationships, and final table grain all passed validation in the latest run.
+        </div>
+        <ul class="bullets">
+          <li>The final mart is one row per vendor and product.</li>
+          <li>Freight is not repeated across all vendor-product rows. It is allocated by purchase-dollar share.</li>
+          <li>Inventory cost here is an estimate based on average purchase cost and end inventory units.</li>
+          <li>This report is generated from local SQLite data, so it can be rebuilt after model changes.</li>
+        </ul>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
