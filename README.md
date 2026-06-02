@@ -99,6 +99,16 @@ From the rebuilt `mart_vendor_performance` table:
 - A large amount of inventory cost is tied up in a few vendors.
 - Some stores depend heavily on one vendor.
 
+## Dashboard preview
+
+The generated HTML report is in [dashboard/vendor_performance_dashboard.html](./dashboard/vendor_performance_dashboard.html).
+
+![Dashboard overview](./docs/screenshots/dashboard-overview.png)
+
+![Vendor and concentration views](./docs/screenshots/dashboard-vendor-section.png)
+
+![Store dependency and slow-turnover views](./docs/screenshots/dashboard-risk-section.png)
+
 ## Files to look at first
 
 - [src/load_raw_to_sqlite.py](./src/load_raw_to_sqlite.py)
